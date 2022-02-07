@@ -1,0 +1,42 @@
+
+$theme-colors: (
+  "nav": #2d2d2d,
+  "dark": #595959,
+  "darkAccent":#939393,
+  "innerBox": #ffffff,
+  "lightgray": #E0E0E0,
+  "anthracite": #EFEFEF,
+  "primary": #3CC4F5,
+  "secondary":#9BC8D9,	
+  "navbar":#000000,
+  "mainbackground": #171A21,
+  "accent": #00FF5E,
+  "fuchsia": #FF00FF,
+  "tgrey": #CCCCCC,
+  "darkpurple": #430f4d,
+  
+  
+  "black": #000000,
+  
+  "warningButton": #6C757D,
+);
+$navbar-dark-color:         #ffffff;
+$navbar-dark-hover-color:   #00FF5E;
+
+.input-group-text {
+    background-color:  #00FF5E;
+}
+
+$input-placeholder-color: #343A40;
+
+$text-small: (
+  font-size: 0.5rem
+ );
+
+
+@mixin make-border-width($width: 1) {
+    border-width: $width;
+}
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
