@@ -10,8 +10,7 @@
 export const USDC_h = '0x985458e523db3d53125813ed68c274899e9dfab4'
 export const HND_USDC_h = '0x5577D07aC1EC7b96C7dB7f53FFA81C48A1bf5410'
 
-
-export const listHarmony = [["Hundred Finance", "Lending", "USDC","0x4f52bA9Dd9df93B105A5d80A19BCDd14a668a2B6","0x985458e523db3d53125813ed68c274899e9dfab4",13]]
+export const listHarmony = [["Hundred Finance", "Lending", "USDC","0x4a718666B0FDc682F150a491F14b149E1316F75E","0x985458e523db3d53125813ed68c274899e9dfab4",13],["Hundred Finance", "Lending", "UST","0x87AbD1CD28ddCDa557bdd5767f76bFC4742aE8Ff","0x224e64ec1bdce3870a6a6c777edd450454068fec",13],["Hundred Finance", "Lending", "USDT","0xa8cc6Af28E0960DF264C6E56AC08500b2D9ffd55","0x3c2b8be99c50593081eaa2a724f0b8285f5aba8f",13]]
 
 export const ERC20_ABI = [
     {

@@ -44,10 +44,10 @@ class Mainpage extends Component {
         let approvalGiven = await this.checkApproval(this.state.selectedTokenAddress,this.state.selectedFarmAddress)
         console.log(approvalGiven)
         if (approvalGiven) {
-            this.setState({depositButtonModalVisible: true})
+            this.setState({depositButtonModalVisible: false})
         }
         else {
-            this.setState({approvalButtonVisible: true})
+            this.setState({approvalButtonModalVisible: true})
         }
         
         this.setState({depositModalOpen: true })  
@@ -243,6 +243,56 @@ class Mainpage extends Component {
         return (true)
     };
 
+    harvestRewards= async (farmIndex) =>{
+        await this.setState({selectedFarmIndex:farmIndex});
+        this.setState({selectedFarmName: this.props.farmList[farmIndex][0]})
+        this.setState({selectedFarmType: this.props.farmList[farmIndex][1]})
+        this.setState({selectedFarmCoin: this.props.farmList[farmIndex][2]})
+        this.setState({selectedFarmAddress: this.props.farmList[farmIndex][3]})
+        await this.setState({selectedTokenAddress: this.props.farmList[farmIndex][4]})
+
+        let message = "Harvesting rewards"
+        this.props.openMessageBox(message)
+        
+        //let tokenContract = new this.props.web3.eth.Contract(this.props.ERC20_ABI,this.state.selectedTokenAddress);
+        let farmContract = new this.props.web3.eth.Contract(this.props.Farm_ABI,this.state.selectedFarmAddress);
+        
+        try{
+            await farmContract.methods.harvest().send({from: this.props.address})
+            .on('receipt', async (receipt) => {
+                console.log(receipt);
+                if (receipt.status === true) {
+                    this.props.closeMessageBox();   
+                    }
+                else {
+                    this.props.closeMessageBox();
+                    let message = "Transaction failed"
+                    this.props.openMessageBox(message);
+                    await this.props.sleep(5000)
+                    this.props.closeMessageBox();   
+
+                }
+                   
+            })
+        }
+        catch(e){
+            console.log(e['message'])
+            if (e['message'].includes('not mined within 50 blocks') ==!true) {
+                message = e['message']
+                this.props.openMessageBox(message)
+                await this.props.sleep(5000)
+                this.props.closeMessageBox();
+                return(false)
+            }  
+        }
+        this.props.closeMessageBox()
+        return (true)
+
+
+        
+        
+    }
+
     render() { 
         let poolOutput = '';
         let farmList = this.props.farmList
@@ -262,6 +312,7 @@ class Mainpage extends Component {
                     <td className="text-right" scope="col">{this.props.outputNumber(farm[6]/1000000,0)}</td>                                           
                     <td className="text-right" scope="col"><Button className="btn btn-fuchsia w-100 mb-2" variant="warning" id="buttonRounded" onClick={()=>this.openDepositModal(index)}>Deposit</Button></td>
                     <td className="text-right" scope="col"><Button className="btn btn-fuchsia w-100 mb-2" variant="warning" id="buttonRounded" onClick={()=>this.openRemovalModal(index)}>Remove</Button></td>
+                    <td className="text-right" scope="col"><Button className="btn btn-fuchsia w-100 mb-2" variant="warning" id="buttonRounded" onClick={()=>this.harvestRewards(index)}>Harvest</Button></td>
                 </tr>
 
                 
@@ -297,7 +348,7 @@ class Mainpage extends Component {
                                     </div>
                                     <input id="tokenAmountIn" onChange={() =>this.calculateDepositInput()} className="form-control mb-3" type="text" lang="en" placeholder="0"/>
                                 </div>
-                                {this.state.approvalButtonVisible ? <div><Button className="btn btn-fuchsia w-100 mb-2" id="buttonRounded" onClick={this.approveAccount}>Approve</Button></div> : <div></div>}
+                                {this.state.approvalButtonModalVisible ? <div><Button className="btn btn-fuchsia w-100 mb-2" id="buttonRounded" onClick={this.approveAccount}>Approve</Button></div> : <div></div>}
                                 {this.state.depositButtonModalVisible ? <div><Button className="btn btn-fuchsia w-100 mb-2"  id="buttonRounded" onClick={this.depositToken}>Deposit</Button></div> : <div></div>}
                                 
                             </Modal.Body>
@@ -379,6 +430,7 @@ class Mainpage extends Component {
                                             <th className="text-right" scope="col">Coin</th>
                                             <th className="text-right" scope="col">APR</th>
                                             <th className="text-right" scope="col">Your Balance (USD)</th>                                           
+                                            <th className="text-right" scope="col"></th>
                                             <th className="text-right" scope="col"></th>
                                             <th className="text-right" scope="col"></th>
                                         </tr>
