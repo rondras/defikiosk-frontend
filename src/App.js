@@ -266,15 +266,18 @@ class App extends Component{
       let USDCBalance = 0;
       let farmAddress = farmList[farmIndex][3]
       let farmContract = new this.state.web3.eth.Contract(HNDFarm,farmAddress);
+      let tokenContract = new this.state.web3.eth.Contract(HNDFarm,farmList[farmIndex][4]);
       console.log(farmAddress)
       
-      USDCBalance = await farmContract.methods.USDBalanceOf(this.state.account).call()
+      USDCBalance = await farmContract.methods.USDBalanceOf(this.state.account).call();
+      let decimals = await tokenContract.methods.decimals().call();
       console.log(parseInt(USDCBalance))
       
-      farm.push(parseInt(USDCBalance))
+      farm.push(parseFloat(USDCBalance/(10**decimals-1)))
       enhancedFarmList.push(farm)
       console.log(enhancedFarmList)    
-    }
+    };
+
     console.log(enhancedFarmList)
     console.log(this.state.farmList)
     this.setState({farmList: enhancedFarmList})  

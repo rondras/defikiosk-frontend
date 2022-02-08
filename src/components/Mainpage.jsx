@@ -44,10 +44,14 @@ class Mainpage extends Component {
         let approvalGiven = await this.checkApproval(this.state.selectedTokenAddress,this.state.selectedFarmAddress)
         console.log(approvalGiven)
         if (approvalGiven) {
-            this.setState({depositButtonModalVisible: false})
+            this.setState({approvalButtonModalVisible: false});
+            this.setState({depositButtonModalVisible: true});
+            
         }
         else {
-            this.setState({approvalButtonModalVisible: true})
+            this.setState({approvalButtonModalVisible: true});
+            this.setState({depositButtonModalVisible: false});
+            
         }
         
         this.setState({depositModalOpen: true })  
@@ -309,7 +313,7 @@ class Mainpage extends Component {
                     <td className="text-right" scope="col">{farm[1]}</td>
                     <td className="text-right" scope="col">{farm[2]}</td>
                     <td className="text-right" scope="col">{farm[5]}%</td>  
-                    <td className="text-right" scope="col">{this.props.outputNumber(farm[6]/1000000,0)}</td>                                           
+                    <td className="text-right" scope="col">{this.props.outputNumber(farm[6],0)}</td>                                           
                     <td className="text-right" scope="col"><Button className="btn btn-fuchsia w-100 mb-2" variant="warning" id="buttonRounded" onClick={()=>this.openDepositModal(index)}>Deposit</Button></td>
                     <td className="text-right" scope="col"><Button className="btn btn-fuchsia w-100 mb-2" variant="warning" id="buttonRounded" onClick={()=>this.openRemovalModal(index)}>Remove</Button></td>
                     <td className="text-right" scope="col"><Button className="btn btn-fuchsia w-100 mb-2" variant="warning" id="buttonRounded" onClick={()=>this.harvestRewards(index)}>Harvest</Button></td>
